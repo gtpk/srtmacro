@@ -11,28 +11,28 @@ function playSound() {
 	audio.play();
 }
 
-function sendTelegramMessage() {
+function sendMessageToTelegram() {
 	var botToken = localStorage['botToken'];
-	var chatId = localStorage['chatId'];
+    var chatId = localStorage['chatId'];
 	var msg = encodeURI('Macro has been stopped. Please check your reservation status.');
 	if (botToken != undefined && chatId != undefined) {
-		var url = 'https://api.telegram.org/bot' + botToken + '/sendmessage?chat_id=' + chatId + '&text=' + msg;
-		
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange=function() {
-			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-				var response = xmlhttp.responseText; //if you need to do something with the returned value
-			}
-		}
-		xmlhttp.open('GET', url, true);
-		xmlhttp.send();
-	}
+        var url = 'https://api.telegram.org/bot' + botToken + '/sendMessage?chat_id=' + chatId + '&text=' + msg;
+        
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                var response = xmlhttp.responseText; //if you need to do something with the returned value
+            }
+        }
+        xmlhttp.open('GET', url, true);
+        xmlhttp.send();
+    }
 }
 
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     if (message && message.type == 'playSound') {
-        playSound();
-		sendTelegramMessage();
+		playSound();
+		sendMessageToTelegram();
         sendResponse(true);
     }
 });
